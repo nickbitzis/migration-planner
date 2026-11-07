@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Lint
+        run: uvx ruff check .
+      - name: Test
+        run: uv run --python 3.12 --group dev pytest -q
+
+  plan:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Full plan on the sample estate (fails if partitioning does not beat the naive plans)
+        run: uv run --python 3.12 migplan plan --out plan-out --gate --summary "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: migration-plan
+          path: plan-out/
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t migration-planner:ci .
+      - name: Smoke test the container
+        run: |
+          docker run -d --name mp -p 8821:8821 migration-planner:ci
+          for i in $(seq 1 60); do curl -sf localhost:8821/healthz && break; sleep 1; done
+          curl -sf localhost:8821/healthz
+          curl -sf localhost:8821/api/waves > /dev/null
+          curl -sf localhost:8821/api/export/waves.csv | head -3
+          curl -sf localhost:8821/metrics | grep migplan_requests_total
+          docker rm -f mp

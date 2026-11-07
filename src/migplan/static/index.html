@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>migration-planner</title>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --text: #1c2330; --muted: #5d6878; --border: #dde2e9; --track: #e8ebf0;
+  --accent: #2f6fdb; --accent-soft: #e6eefc; --bad: #b42318; --bad-soft: #fde8e6; --warn: #8a5a00; --warn-soft: #fff4dc;
+  --good: #11804f; --good-soft: #e3f5ec;
+  --s-rehost: #2a78d6; --s-replatform: #1baf7a; --s-refactor: #6250d6; --s-repurchase: #eda100;
+  --s-retire: #eb6834; --s-retain: #e87ba4; --series-1: #2a78d6; --series-2: #eb6834;
+  --radius: 10px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11151c; --panel: #181e27; --text: #e6eaf0; --muted: #9aa5b5; --border: #2a3340; --track: #232b37;
+    --accent: #6c9cf0; --accent-soft: #1c2a44; --bad: #ff8a7a; --bad-soft: #3b1d1b; --warn: #f3c46b;
+    --warn-soft: #3a2e14; --good: #4ccb8f; --good-soft: #15302a;
+    --s-rehost: #3987e5; --s-replatform: #199e70; --s-refactor: #9085e9; --s-repurchase: #c98500;
+    --s-retire: #d95926; --s-retain: #d55181; --series-1: #3987e5; --series-2: #d95926; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: var(--text); font-size: 14px; }
+header { padding: 16px 24px 4px; display: flex; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; }
+h1 { font-size: 20px; margin: 0; }
+h2 { font-size: 13px; margin: 0 0 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.muted { color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 8px 24px; }
+.kpi { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; min-width: 0; }
+.kpi b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 12px; color: var(--muted); }
+nav { display: flex; gap: 6px; padding: 8px 24px; flex-wrap: wrap; }
+nav button { background: transparent; border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 12px; cursor: pointer; font: inherit; }
+nav button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+nav a { margin-left: auto; align-self: center; color: var(--accent); font-size: 13px; }
+main { padding: 8px 24px 24px; }
+.view { display: none; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.view.on { display: grid; }
+.two { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; min-width: 0; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+input, select, textarea { padding: 6px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--bg); color: var(--text); font: inherit; max-width: 100%; }
+button.primary { padding: 7px 12px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+button.small { padding: 3px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); color: var(--text); cursor: pointer; font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 8px; border-top: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; border-top: 0; white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll { overflow-x: auto; max-width: 100%; }
+.tall { max-height: 640px; overflow-y: auto; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: var(--accent-soft); }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 1px 8px; border-radius: 10px; background: var(--track); color: var(--text); white-space: nowrap; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); margin: 6px 0; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.reasons { margin: 6px 0 0; padding-left: 18px; font-size: 12px; }
+.reasons li { margin: 2px 0; }
+.detail { background: var(--bg); border-radius: 8px; padding: 10px 12px; }
+svg text { fill: var(--muted); font-size: 11px; }
+.graph-wrap { position: relative; }
+#graph { width: 100%; height: auto; display: block; touch-action: manipulation; }
+#graph line { stroke: var(--muted); stroke-opacity: .28; }
+#graph line.undoc { stroke: var(--warn); stroke-opacity: .85; stroke-dasharray: 4 3; }
+#graph line.hi { stroke-opacity: .95; }
+#graph circle { stroke: var(--panel); stroke-width: 1.5; cursor: pointer; }
+#graph .dim { opacity: .12; }
+#graph .sel { stroke: var(--text); stroke-width: 2.5; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.12); display: none; max-width: 260px; z-index: 5; }
+.gantt rect.bar { cursor: pointer; }
+.wave-apps { columns: 2 220px; font-size: 13px; margin-top: 8px; }
+.summary p { margin: 0 0 10px; line-height: 1.45; }
+form.ov { display: grid; gap: 6px; margin-top: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 860px) {
+  .two { grid-template-columns: minmax(0, 1fr); }
+  header, nav, main, .kpis { padding-left: 16px; padding-right: 16px; }
+  .hide-sm { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>migration-planner</h1>
+  <span class="muted" id="company">Data center exit plan</span>
+</header>
+<div class="kpis" id="kpis"></div>
+<nav id="tabs">
+  <button data-v="portfolio" class="on">Portfolio</button>
+  <button data-v="graph">Dependencies</button>
+  <button data-v="waves">Waves</button>
+  <button data-v="tco">TCO</button>
+  <button data-v="risks">Risks</button>
+  <a href="/api/export/plan.md">plan.md</a><a href="/api/export/waves.csv" style="margin-left:10px">waves.csv</a>
+</nav>
+<main>
+  <section class="view on" id="v-portfolio">
+    <div class="panel">
+      <h2>Application portfolio and 6R</h2>
+      <div class="filters">
+        <input id="q" placeholder="Search name or id" size="18">
+        <select id="f-strategy"><option value="">All strategies</option></select>
+        <select id="f-bu"><option value="">All business units</option></select>
+        <span class="muted" id="p-count" style="align-self:center"></span>
+      </div>
+      <div class="legend" id="s-legend"></div>
+      <div class="scroll tall"><table id="ptable"><thead><tr>
+        <th>App</th><th class="hide-sm">Business unit</th><th>6R</th><th class="num">Wave</th>
+        <th class="num hide-sm">Confidence</th><th>Main reason</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="view two" id="v-graph">
+    <div class="panel graph-wrap">
+      <h2>Application dependency graph (from flows)</h2>
+      <div class="filters">
+        <select id="g-pick"><option value="">Highlight an app</option></select>
+        <button class="small" id="g-clear">Clear</button>
+      </div>
+      <div class="legend" id="g-legend"></div>
+      <svg id="graph" viewBox="0 0 900 640" role="img" aria-label="Dependency graph"></svg>
+      <div class="tip" id="g-tip"></div>
+    </div>
+    <div class="panel">
+      <h2>Discovery</h2>
+      <div id="disc"></div>
+      <div id="g-detail" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-waves">
+    <div class="panel">
+      <h2>Wave timeline</h2>
+      <div class="legend"><span><i class="dot" style="background:var(--track)"></i>prep month</span>
+        <span><i class="dot" style="background:var(--series-1)"></i>cutover</span>
+        <span><i class="dot" style="background:var(--s-repurchase)"></i>dual running, then decommission</span>
+        <span><i class="dot" style="background:var(--s-retain)"></i>shared database cutover</span></div>
+      <div class="scroll"><svg id="gantt" class="gantt" viewBox="0 0 900 420" style="width:100%;min-width:560px"></svg></div>
+      <div id="wave-detail" class="detail" style="margin-top:10px"></div>
+    </div>
+    <div class="panel">
+      <h2>Partitioning vs naive plans (same constraints)</h2>
+      <div class="scroll"><table id="cmp"></table></div>
+      <p class="muted" style="font-size:12px;margin:8px 0 0">Cross-wave traffic is the edge weight (GB per day plus 1 per 10,000 connections per day) between apps in different waves: traffic that crosses the WAN while one side has moved and the other has not.</p>
+    </div>
+    <div class="panel summary"><h2>Executive summary (offline provider, computed facts only)</h2><div id="summary"></div></div>
+  </section>
+
+  <section class="view two" id="v-tco">
+    <div class="panel graph-wrap">
+      <h2>Cumulative cost, 5 years</h2>
+      <div class="legend"><span><i class="dot" style="background:var(--series-1)"></i>Stay on premises</span>
+        <span><i class="dot" style="background:var(--series-2)"></i>Migrate on this plan</span></div>
+      <svg id="tco-chart" viewBox="0 0 760 360" style="width:100%;height:auto"></svg>
+      <div class="tip" id="t-tip"></div>
+      <div class="scroll"><table id="tco-years" style="margin-top:8px"></table></div>
+    </div>
+    <div class="panel">
+      <h2>Result</h2><div id="tco-kpis"></div>
+      <h2 style="margin-top:14px">Assumptions</h2>
+      <div class="scroll tall"><table id="tco-assume"></table></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-risks">
+    <div class="panel">
+      <h2>Risk register</h2>
+      <div class="filters"><select id="r-cat"><option value="">All categories</option></select>
+        <span class="muted" id="r-count" style="align-self:center"></span></div>
+      <div class="scroll tall"><table id="rtable"><thead><tr><th>ID</th><th class="num">Score</th><th>Category</th>
+        <th>Risk</th><th class="hide-sm">Wave</th><th>Mitigation</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+</main>
+<script>
+const STRATS = ["rehost", "replatform", "refactor", "repurchase", "retire", "retain"];
+const sv = s => `var(--s-${s})`;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const usd = x => (Math.abs(x) >= 1e6 ? `$${(x / 1e6).toFixed(1)}M` : `$${Math.round(x).toLocaleString()}`);
+const chip = s => `<span class="chip"><i class="dot" style="background:${sv(s)}"></i>${s}</span>`;
+const get = u => fetch(u).then(r => r.json());
+let S = {};
+
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + b.dataset.v));
+  if (b.dataset.v === "graph" && !S.graphDrawn) drawGraph();
+});
+const legend = el => { el.innerHTML = STRATS.map(s => `<span><i class="dot" style="background:${sv(s)}"></i>${s}</span>`).join(""); };
+
+async function load() {
+  const [facts, inv, graph, waves, tco, risks, summ] = await Promise.all([
+    get("/api/summary-stats"), get("/api/inventory"), get("/api/graph"), get("/api/waves"), get("/api/tco"),
+    get("/api/risks"), get("/api/summary")]);
+  Object.assign(S, {facts, inv: inv.apps, graph, waves, tco, risks: risks.risks, summ});
+  $("#company").textContent = `${facts.company}: ${facts.apps} applications, ${facts.servers} servers`;
+  $("#kpis").innerHTML = [
+    [facts.dependencies_discovered, "dependencies found in flows"],
+    [facts.undocumented_dependencies, "missing from the CMDB"],
+    [`${facts.cut_reduction_vs_business_unit_pct}%`, "less cross-wave traffic than by-BU"],
+    [`${facts.waves} waves`, `${facts.first_wave} to ${facts.last_wave}`],
+    [usd(facts.npv_usd), "5 year NPV"],
+    [facts.break_even_month ? `month ${facts.break_even_month}` : "none", "break-even"],
+    [facts.high_risks, `high risks of ${facts.risks}`],
+  ].map(([b, s]) => `<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("");
+  legend($("#s-legend")); legend($("#g-legend"));
+  $("#g-legend").insertAdjacentHTML("beforeend", `<span><svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke="var(--warn)" stroke-dasharray="4 3" stroke-width="2"/></svg>undocumented</span>`);
+  STRATS.forEach(s => $("#f-strategy").insertAdjacentHTML("beforeend", `<option>${s}</option>`));
+  [...new Set(S.inv.map(a => a.business_unit))].sort().forEach(b => $("#f-bu").insertAdjacentHTML("beforeend", `<option>${esc(b)}</option>`));
+  S.inv.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach(a => $("#g-pick").insertAdjacentHTML("beforeend", `<option value="${a.id}">${esc(a.name)}</option>`));
+  renderPortfolio(); renderDiscovery(); renderWaves(); renderTco(); renderRisks();
+}
+
+// ---------- portfolio ----------
+function renderPortfolio() {
+  const q = $("#q").value.toLowerCase(), fs = $("#f-strategy").value, fb = $("#f-bu").value;
+  const rows = S.inv.filter(a => (!fs || a.strategy === fs) && (!fb || a.business_unit === fb) &&
+    (!q || a.name.toLowerCase().includes(q) || a.id.toLowerCase().includes(q)));
+  $("#p-count").textContent = `${rows.length} apps`;
+  $("#ptable tbody").innerHTML = rows.map(a => {
+    const r = a.override ? `Override by ${a.override.by}: ${a.override.reason}` : a.main_reason;
+    return `<tr class="click" data-id="${a.id}"><td><b>${esc(a.name)}</b><div class="muted" style="font-size:12px">${a.id} · ${esc(a.os)}</div></td>
+      <td class="hide-sm">${esc(a.business_unit)}</td><td>${chip(a.strategy)}${a.override ? ' <span class="chip warn">override</span>' : ""}</td>
+      <td class="num">${a.wave ?? "-"}</td><td class="num hide-sm">${Math.round(a.confidence * 100)}%</td><td>${esc(r)}</td></tr>
+      <tr class="exp" id="x-${a.id}" style="display:none"><td colspan="6"></td></tr>`;
+  }).join("");
+  document.querySelectorAll("#ptable tr.click").forEach(tr => tr.onclick = () => toggleRow(tr.dataset.id));
+}
+function toggleRow(id) {
+  const tr = $(`#x-${id}`), a = S.inv.find(x => x.id === id);
+  if (tr.style.display !== "none") { tr.style.display = "none"; return; }
+  const scores = Object.entries(a.scores).sort((x, y) => y[1] - x[1]).map(([s, v]) => `${s} ${v}`).join(" · ");
+  tr.firstElementChild.innerHTML = `<div class="detail">
+    <div><b>Scores</b>: ${scores}${a.override ? ` · rules chose <b>${a.computed}</b>` : ""}</div>
+    <ul class="reasons">${a.reasons.map(r => `<li><code>${r.rule}</code> ${esc(r.text)}</li>`).join("")}</ul>
+    <form class="ov" data-id="${id}"><b>Override</b>
+      <select name="strategy">${STRATS.map(s => `<option ${s === a.strategy ? "selected" : ""}>${s}</option>`).join("")}</select>
+      <input name="by" placeholder="Who (name or board)" required maxlength="120">
+      <input name="reason" placeholder="Why" required maxlength="500">
+      <div><button class="primary">Save override</button> ${a.override && a.override.source === "api" ? '<button type="button" class="small clr">Clear override</button>' : ""}</div>
+      <span class="muted msg"></span></form></div>`;
+  tr.style.display = "";
+  const f = tr.querySelector("form");
+  f.onsubmit = async ev => {
+    ev.preventDefault();
+    const body = Object.fromEntries(new FormData(f));
+    const r = await fetch(`/api/overrides/${id}`, {method: "PUT", headers: {"content-type": "application/json"}, body: JSON.stringify(body)});
+    f.querySelector(".msg").textContent = r.ok ? "Saved. Waves, TCO, and risks recomputed." : "Rejected: " + (await r.text());
+    if (r.ok) { await reloadAll(); }
+  };
+  const clr = f.querySelector(".clr");
+  if (clr) clr.onclick = async () => { await fetch(`/api/overrides/${id}`, {method: "DELETE"}); await reloadAll(); };
+}
+async function reloadAll() { S.graphDrawn = false; await load(); }
+["#q", "#f-strategy", "#f-bu"].forEach(s => $(s).addEventListener("input", renderPortfolio));
+
+// ---------- dependency graph ----------
+function renderDiscovery() {
+  const g = S.graph, n = g.noise, f = x => (x || {flows: 0}).flows.toLocaleString();
+  $("#disc").innerHTML = `<table>
+    <tr><td>Flow records</td><td class="num">${g.total_flows.toLocaleString()}</td></tr>
+    <tr><td>Dropped: shared infrastructure</td><td class="num">${f(n.infrastructure)}</td></tr>
+    <tr><td>Dropped: noise ports</td><td class="num">${f(n.noise_port)}</td></tr>
+    <tr><td>Dropped: below threshold</td><td class="num">${f(n.below_threshold)}</td></tr>
+    <tr><td>Dropped: inside one app</td><td class="num">${f(n.intra_app)}</td></tr>
+    <tr><td>Kept as app dependencies</td><td class="num">${g.kept_flows.toLocaleString()}</td></tr>
+    <tr><td>App to app edges</td><td class="num">${g.edges.length}</td></tr>
+    <tr><td>Confirmed by the CMDB</td><td class="num">${g.confirmed}</td></tr>
+    <tr><td>Undocumented</td><td class="num">${g.undocumented.length}</td></tr>
+    <tr><td>Documented, no traffic</td><td class="num">${g.stale_documented.length}</td></tr>
+    <tr><td>Unknown IPs</td><td class="num">${g.unknown_endpoints.map(u => u.ip).join(", ")}</td></tr></table>
+    <p class="muted" style="font-size:12px">Heaviest undocumented: ${g.undocumented.slice(0, 3).map(d => `${esc(d.src_name)} to ${esc(d.dst_name)} (${d.gb_per_day.toFixed(1)} GB/day)`).join("; ")}</p>`;
+}
+function drawGraph() {
+  S.graphDrawn = true;
+  const W = 900, H = 640, g = S.graph, nodes = g.nodes.map(n => ({...n})), byId = {};
+  const bus = [...new Set(nodes.map(n => n.bu))].sort();
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  nodes.forEach(n => {
+    const k = bus.indexOf(n.bu), ang = 2 * Math.PI * k / bus.length;
+    n.x = W / 2 + Math.cos(ang) * 220 + (rnd() - .5) * 80; n.y = H / 2 + Math.sin(ang) * 200 + (rnd() - .5) * 80;
+    n.deg = 0; byId[n.id] = n;
+  });
+  const und = new Set(g.undocumented.map(d => d.src + ">" + d.dst));
+  const edges = g.edges.map(e => ({s: byId[e.src], t: byId[e.dst], w: e.weight, undoc: und.has(e.src + ">" + e.dst)}));
+  edges.forEach(e => { e.s.deg++; e.t.deg++; });
+  // Fruchterman-Reingold with a cooling schedule and a little gravity, deterministic seed
+  const k = Math.sqrt(W * H / nodes.length) * 0.45, iters = 320;
+  for (let it = 0; it < iters; it++) {
+    const temp = 40 * (1 - it / iters) + 0.5;
+    nodes.forEach(n => { n.dx = 0; n.dy = 0; });
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy + .01;
+      const f = k * k / d2; a.dx += dx * f; a.dy += dy * f; b.dx -= dx * f; b.dy -= dy * f;
+    }
+    edges.forEach(e => {
+      const dx = e.t.x - e.s.x, dy = e.t.y - e.s.y, d = Math.sqrt(dx * dx + dy * dy) + .01;
+      const f = d / k * (1 + 0.5 * Math.log1p(e.w)) / Math.sqrt(Math.max(1, Math.max(e.s.deg, e.t.deg) / 6));
+      e.s.dx += dx * f; e.s.dy += dy * f; e.t.dx -= dx * f; e.t.dy -= dy * f;
+    });
+    nodes.forEach(n => {
+      n.dx += (W / 2 - n.x) * 0.05; n.dy += (H / 2 - n.y) * 0.05;
+      const d = Math.sqrt(n.dx * n.dx + n.dy * n.dy) + .01, m = Math.min(d, temp);
+      n.x = Math.max(12, Math.min(W - 12, n.x + n.dx / d * m)); n.y = Math.max(12, Math.min(H - 12, n.y + n.dy / d * m));
+    });
+  }
+  const svg = $("#graph");
+  svg.innerHTML = edges.map((e, i) => `<line data-i="${i}" class="${e.undoc ? "undoc" : ""}" x1="${e.s.x.toFixed(1)}" y1="${e.s.y.toFixed(1)}" x2="${e.t.x.toFixed(1)}" y2="${e.t.y.toFixed(1)}" stroke-width="${(0.6 + Math.log1p(e.w) * .55).toFixed(2)}"/>`).join("") +
+    nodes.map(n => `<circle data-id="${n.id}" cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${(4 + Math.sqrt(n.deg) * 1.6).toFixed(1)}" fill="${sv(n.strategy)}"/>`).join("");
+  S.gnodes = byId; S.gedges = edges;
+  const tip = $("#g-tip");
+  svg.querySelectorAll("circle").forEach(c => {
+    c.onclick = () => { $("#g-pick").value = c.dataset.id; highlight(c.dataset.id); };
+    c.onmouseenter = ev => { const n = byId[c.dataset.id]; tip.style.display = "block";
+      tip.innerHTML = `<b>${esc(n.name)}</b><br>${esc(n.bu)} · ${n.strategy}${n.wave ? " · wave " + n.wave : ""}<br>${n.deg} dependencies`;
+      const r = svg.getBoundingClientRect(), p = svg.parentElement.getBoundingClientRect();
+      tip.style.left = Math.min(r.width - 200, (n.x / W) * r.width + 12) + (r.left - p.left) + "px";
+      tip.style.top = (n.y / H) * r.height + (r.top - p.top) + 10 + "px"; };
+    c.onmouseleave = () => tip.style.display = "none";
+  });
+  if ($("#g-pick").value) highlight($("#g-pick").value);
+}
+function highlight(id) {
+  if (!S.graphDrawn) drawGraph();
+  const svg = $("#graph"), nb = new Set(id ? [id] : []);
+  S.gedges.forEach(e => { if (e.s.id === id) nb.add(e.t.id); if (e.t.id === id) nb.add(e.s.id); });
+  svg.querySelectorAll("circle").forEach(c => { c.classList.toggle("dim", !!id && !nb.has(c.dataset.id)); c.classList.toggle("sel", c.dataset.id === id); });
+  svg.querySelectorAll("line").forEach(l => { const e = S.gedges[l.dataset.i], on = e.s.id === id || e.t.id === id;
+    l.classList.toggle("dim", !!id && !on); l.classList.toggle("hi", on); });
+  if (!id) { $("#g-detail").innerHTML = ""; return; }
+  const a = S.inv.find(x => x.id === id), out = S.graph.edges.filter(e => e.src === id || e.dst === id).sort((x, y) => y.weight - x.weight);
+  $("#g-detail").innerHTML = `<div class="detail"><b>${esc(a.name)}</b> ${chip(a.strategy)} <span class="muted">wave ${a.wave ?? "-"}</span>
+    <table style="margin-top:6px"><tr><th>Neighbor</th><th class="num">GB/day</th><th class="num">Wave</th></tr>
+    ${out.slice(0, 12).map(e => { const o = e.src === id ? e.dst : e.src, n = S.gnodes[o];
+      return `<tr><td>${e.src === id ? "calls" : "called by"} ${esc(n.name)}${e.documented ? "" : ' <span class="chip warn">undocumented</span>'}</td><td class="num">${e.gb_per_day.toFixed(2)}</td><td class="num">${n.wave ?? "-"}</td></tr>`; }).join("")}</table></div>`;
+}
+$("#g-pick").onchange = () => highlight($("#g-pick").value);
+$("#g-clear").onclick = () => { $("#g-pick").value = ""; highlight(""); };
+
+// ---------- waves ----------
+function renderWaves() {
+  const W = S.waves, waves = W.waves, n = waves.length, months = n + 3, x0 = 74, cw = (900 - x0 - 10) / months, rh = 26, y0 = 26;
+  const svg = $("#gantt"); svg.setAttribute("viewBox", `0 0 900 ${y0 + n * rh + 10}`);
+  const mlabel = i => { const d = new Date(waves[0].start + "T00:00:00"); d.setMonth(d.getMonth() + i - 1); return d.toLocaleString("en", {month: "short"}) + (d.getMonth() === 0 ? " " + String(d.getFullYear()).slice(2) : ""); };
+  let h = "";
+  for (let i = 0; i < months; i++) h += `<text x="${x0 + i * cw + cw / 2}" y="16" text-anchor="middle">${mlabel(i)}</text><line x1="${x0 + i * cw}" y1="20" x2="${x0 + i * cw}" y2="${y0 + n * rh}" stroke="var(--border)"/>`;
+  waves.forEach((w, k) => {
+    const y = y0 + k * rh, cx = x0 + (w.wave) * cw;
+    h += `<text x="4" y="${y + 17}">W${w.wave}${w.pilot ? " pilot" : ""}</text>`;
+    h += `<rect x="${cx - cw + 1}" y="${y + 5}" width="${cw - 2}" height="${rh - 10}" rx="4" fill="var(--track)"/>`;
+    h += `<rect class="bar" data-w="${w.wave}" x="${cx + 1}" y="${y + 4}" width="${cw - 2}" height="${rh - 8}" rx="4" fill="${w.includes_shared_db ? "var(--s-retain)" : "var(--series-1)"}"/>`;
+    h += `<rect x="${cx + cw + 1}" y="${y + 8}" width="${2 * cw - 2}" height="${rh - 16}" rx="3" fill="var(--s-repurchase)" opacity=".55"/>`;
+    const lbl = `${w.apps.length} apps, ${w.effort} pts${w.includes_shared_db ? ", shared DB" : ""}`, right = cx + cw * 3 + 6 + lbl.length * 6 < 900;
+    h += `<text x="${right ? cx + cw * 3 + 6 : cx - cw - 6}" y="${y + 17}" text-anchor="${right ? "start" : "end"}">${lbl}</text>`;
+  });
+  svg.innerHTML = h;
+  svg.querySelectorAll("rect.bar").forEach(r => r.onclick = () => waveDetail(+r.dataset.w));
+  waveDetail(1);
+  const lab = {optimized: "Graph partitioning", alphabetical: "Alphabetical", business_unit: "By business unit"};
+  $("#cmp").innerHTML = `<tr><th>Plan</th><th class="num">Cross-wave traffic</th><th class="num">Shared DB part</th><th class="num">Split deps</th><th class="num">Latency splits</th><th class="num">WAN GB</th><th class="num">vs by BU</th></tr>` +
+    W.comparison.map(r => `<tr><td>${lab[r.method]}</td><td class="num">${Math.round(r.total_cut_weight).toLocaleString()}</td><td class="num">${Math.round(r.hub_cut_weight)}</td><td class="num">${r.split_edges} / ${r.edges}</td><td class="num">${r.latency_sensitive_splits}</td><td class="num">${Math.round(r.total_wan_gb).toLocaleString()}</td><td class="num">${r.method === "business_unit" ? "baseline" : "-" + Math.round(r.reduction_vs_bu * 100) + "%"}</td></tr>`).join("");
+  $("#summary").innerHTML = S.summ.text.split("\n\n").map(p => `<p>${esc(p)}</p>`).join("");
+}
+function waveDetail(k) {
+  const w = S.waves.waves[k - 1], hub = S.waves.shared_database;
+  $("#wave-detail").innerHTML = `<b>Wave ${w.wave}, ${w.label}</b>${w.pilot ? " (pilot: low risk apps only)" : ""}: ${w.apps.length} apps, ${w.effort} of ${w.effort_cap} effort points, ${w.servers} servers.
+    ${w.includes_shared_db && hub ? `<div class="muted" style="margin-top:4px">${esc(hub.name)} cuts over this wave. ${esc(hub.approach)}</div>` : ""}
+    <div class="wave-apps">${w.apps.map((a, i) => { const x = S.inv.find(z => z.id === a); return `<div><i class="dot" style="background:${sv(x.strategy)}"></i> ${esc(w.app_names[i])} <span class="muted">${x.strategy}</span></div>`; }).join("")}</div>`;
+}
+
+// ---------- TCO ----------
+function renderTco() {
+  const t = S.tco, n = t.months, cum = a => { let s = 0; return a.map(v => s += v); };
+  const A = cum(t.onprem_monthly), B = cum(t.migrate_monthly), W = 760, H = 360, L = 64, R = 12, T = 14, Bm = 34;
+  const ymax = Math.max(A[n - 1], B[n - 1]) * 1.05, x = i => L + (W - L - R) * i / (n - 1), y = v => T + (H - T - Bm) * (1 - v / ymax);
+  let h = "";
+  for (let k = 0; k <= 5; k++) { const v = ymax * k / 5; h += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${usd(v)}</text>`; }
+  for (let yr = 0; yr <= 5; yr++) { const i = Math.min(n - 1, yr * 12); h += `<text x="${x(i)}" y="${H - 12}" text-anchor="middle">${yr === 0 ? "start" : "year " + yr}</text>`; }
+  const path = a => a.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
+  h += `<path d="${path(A)}" fill="none" stroke="var(--series-1)" stroke-width="2"/><path d="${path(B)}" fill="none" stroke="var(--series-2)" stroke-width="2"/>`;
+  if (t.break_even_month) { const i = t.break_even_month - 1; h += `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H - Bm}" stroke="var(--muted)" stroke-dasharray="3 3"/><text x="${x(i) + 5}" y="${T + 12}">break-even, month ${t.break_even_month}</text>`; }
+  h += `<line id="t-cross" y1="${T}" y2="${H - Bm}" stroke="var(--muted)" visibility="hidden"/><rect id="t-hit" x="${L}" y="${T}" width="${W - L - R}" height="${H - T - Bm}" fill="transparent"/>`;
+  const svg = $("#tco-chart"); svg.innerHTML = h;
+  const tip = $("#t-tip"), cross = svg.querySelector("#t-cross");
+  svg.querySelector("#t-hit").onmousemove = ev => {
+    const r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W, i = Math.max(0, Math.min(n - 1, Math.round((px - L) / (W - L - R) * (n - 1))));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    tip.style.display = "block"; tip.innerHTML = `<b>Month ${i + 1}</b><br>Stay: ${usd(A[i])}<br>Migrate: ${usd(B[i])}<br>Difference: ${usd(A[i] - B[i])}`;
+    const p = svg.parentElement.getBoundingClientRect(); tip.style.left = Math.min(r.width - 170, x(i) / W * r.width + 10) + (r.left - p.left) + "px"; tip.style.top = (r.top - p.top) + 40 + "px";
+  };
+  svg.querySelector("#t-hit").onmouseleave = () => { tip.style.display = "none"; cross.setAttribute("visibility", "hidden"); };
+  $("#tco-years").innerHTML = `<tr><th>Year</th><th class="num">Stay</th><th class="num">Migrate</th><th class="num">Savings</th></tr>` +
+    t.yearly.map(r => `<tr><td>${r.year}</td><td class="num">${usd(r.onprem)}</td><td class="num">${usd(r.migrate)}</td><td class="num">${usd(r.savings)}</td></tr>`).join("");
+  $("#tco-kpis").innerHTML = `<table>
+    <tr><td>NPV at ${(t.assumptions.discount_rate * 100).toFixed(0)}%</td><td class="num"><b>${usd(t.npv)}</b></td></tr>
+    <tr><td>Break-even</td><td class="num">${t.break_even_month ? `month ${t.break_even_month} (${t.break_even_date.slice(0, 7)})` : "not within 5 years"}</td></tr>
+    <tr><td>One time cost</td><td class="num">${usd(t.one_time_total)}</td></tr>
+    <tr><td>Run rate savings after the program</td><td class="num">${usd(t.steady_state_annual_savings)} a year</td></tr>
+    <tr><td>Hardware refresh avoided</td><td class="num">${usd(t.refresh_capex_avoided)}</td></tr>
+    <tr><td>Cloud instances</td><td class="num">${t.cloud_instances}</td></tr></table>`;
+  $("#tco-assume").innerHTML = Object.entries(t.assumptions).map(([k, v]) => `<tr><td><code>${k}</code></td><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("");
+}
+
+// ---------- risks ----------
+function renderRisks() {
+  const cats = [...new Set(S.risks.map(r => r.category))].sort(), sel = $("#r-cat"), cur = sel.value;
+  sel.innerHTML = `<option value="">All categories</option>` + cats.map(c => `<option ${c === cur ? "selected" : ""}>${esc(c)}</option>`).join("");
+  const rows = S.risks.filter(r => !sel.value || r.category === sel.value);
+  $("#r-count").textContent = `${rows.length} risks, ${rows.filter(r => r.score >= 15).length} high`;
+  $("#rtable tbody").innerHTML = rows.map(r => `<tr><td>${r.id}</td><td class="num"><span class="chip ${r.score >= 15 ? "bad" : r.score >= 9 ? "warn" : "good"}">${r.score >= 15 ? "high" : r.score >= 9 ? "med" : "low"} ${r.score}</span></td>
+    <td>${esc(r.category)}</td><td>${esc(r.title)}</td><td class="hide-sm">${r.wave ?? "-"}</td><td class="muted">${esc(r.mitigation)}</td></tr>`).join("");
+}
+$("#r-cat").onchange = renderRisks;
+load().then(() => { const h = location.hash.slice(1), b = document.querySelector(`#tabs button[data-v="${h}"]`); if (b) b.click(); });
+</script>
+</body>
+</html>

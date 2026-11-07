@@ -1,0 +1,109 @@
+# 6R rules for the migration planner.
+#
+# Every app starts from `base` scores. Each rule whose `when` matches adds its `scores` (negative values are
+# allowed) and appends its `reason`, so the result can always be explained line by line. The strategy with the
+# highest total wins; ties break in the order of `strategies`.
+#
+# Conditions: {field: <name>, <op>: <value>} with op in eq, ne, lt, le, gt, ge, in, contains,
+# or {all: [...]}, {any: [...]}, {not: {...}}. Field names are listed in classify.FEATURE_DOCS.
+# Reasons are Python format strings over the same fields.
+
+strategies: [retain, retire, repurchase, refactor, replatform, rehost]
+
+base:
+  rehost: 1.0
+
+rules:
+  - id: retain_mainframe
+    when: {field: platform, eq: mainframe}
+    scores: {retain: 10}
+    reason: "Mainframe workload ({os}); stays in place until a separate modernization program"
+
+  - id: retire_duplicate
+    when: {all: [{field: duplicate, eq: true}, {field: monthly_users, lt: 50}]}
+    scores: {retire: 5}
+    reason: "Does the same job as {duplicate_of_name} and has only {monthly_users} monthly users"
+
+  - id: retire_eol_low_use
+    when: {all: [{field: os_eol, eq: true}, {field: monthly_users, lt: 50}, {field: kind, eq: standard}]}
+    scores: {retire: 4}
+    reason: "{os} is past end of support and only {monthly_users} people use it a month"
+
+  - id: retire_dormant
+    when: {all: [{field: years_since_change, ge: 4}, {field: monthly_users, lt: 50}, {field: dependents, eq: 0}]}
+    scores: {retire: 2}
+    reason: "No change in {years_since_change} years, {monthly_users} monthly users, nothing calls it"
+
+  - id: retire_blocked_by_callers
+    when: {field: dependents, ge: 3}
+    scores: {retire: -4}
+    reason: "{dependents} other apps call it, so retiring it means rewiring them first"
+
+  - id: repurchase_saas
+    when: {all: [{field: cots, eq: true}, {field: saas_equivalent, eq: true}]}
+    scores: {repurchase: 4}
+    reason: "Off the shelf product ({vendor_product}) with a SaaS edition from the vendor"
+
+  - id: cots_vendor_install
+    when: {all: [{field: cots, eq: true}, {field: saas_equivalent, eq: false}]}
+    scores: {rehost: 1.5}
+    reason: "Vendor product ({vendor_product}) without SaaS; the vendor supports the same install on cloud VMs"
+
+  - id: unix_cannot_rehost
+    when: {field: platform, eq: unix}
+    scores: {rehost: -3, replatform: 2.5, refactor: 1}
+    reason: "{os} on proprietary hardware has no like for like cloud target; it has to be ported to Linux"
+
+  - id: eol_os_needs_upgrade
+    when: {all: [{field: os_eol, eq: true}, {field: monthly_users, ge: 50}, {field: platform, eq: x86}]}
+    scores: {replatform: 3}
+    reason: "{os} is past end of support; a rehost would carry an unsupported OS into the cloud"
+
+  - id: os_eol_soon
+    when: {all: [{field: os_eol_by_plan_end, eq: true}, {field: os_eol, eq: false}]}
+    scores: {replatform: 1}
+    reason: "{os} reaches end of support during the program, so upgrade on the way in"
+
+  - id: managed_database
+    when: {all: [{field: db_commercial, eq: true}, {field: cots, eq: false}, {field: team_cloud_skill, ge: 1},
+                 {field: platform, ne: mainframe}]}
+    scores: {replatform: 1.5}
+    reason: "{db_engine} can move to a managed database service, which removes patching and some license cost"
+
+  - id: shared_database
+    when: {field: kind, eq: shared_database}
+    scores: {replatform: 4}
+    reason: "Shared database used by {dependents} apps; move it once to a managed service with replication"
+
+  - id: refactor_high_value
+    when: {all: [{field: business_value, ge: 4}, {field: deploys_per_year, ge: 12}, {field: cots, eq: false},
+                 {field: team_container_skill, ge: 2}]}
+    scores: {refactor: 3.5}
+    reason: "High value ({business_value}/5), {deploys_per_year} deploys a year, and the team runs containers today"
+
+  - id: refactor_needs_skills
+    when: {field: team_cloud_skill, eq: 0}
+    scores: {refactor: -3, replatform: -1}
+    reason: "Owning team ({owner_team}) has no cloud experience yet"
+
+  - id: dotnet_framework_containers
+    when: {all: [{field: tech_stack, eq: ".NET Framework"}, {field: team_container_skill, ge: 2}]}
+    scores: {replatform: 1}
+    reason: ".NET Framework app and a team that can run Windows containers or a managed app platform"
+
+  - id: mainframe_online_latency
+    when: {field: calls_mainframe_online, eq: true}
+    scores: {retain: 3}
+    reason: "Makes online MQ calls to the mainframe on every transaction; keep it next to the mainframe for now"
+
+  - id: stable_lift_and_shift
+    when: {all: [{field: deploys_per_year, le: 4}, {field: os_eol, eq: false}, {field: platform, eq: x86}]}
+    scores: {rehost: 1}
+    reason: "Stable ({deploys_per_year} deploys a year) on a supported OS; lift and shift is the cheapest move"
+
+# Overrides recorded in config. The API can add more at runtime; both kinds keep who and why.
+overrides:
+  - app_id: APP-201
+    strategy: retain
+    by: "Enterprise architecture board"
+    reason: "Tied to the agent portal contract renewal in 2028; revisit then"

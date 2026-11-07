@@ -1,0 +1,219 @@
+wave,wave_start,app_id,app_name,business_unit,owner_team,strategy,overridden,criticality,servers,effort,compliance,latency_sensitive,pilot
+1,2027-01-01,APP-095,Repair Network Viewer,Claims,claims-payments,rehost,False,4,5,1.0,,False,True
+1,2027-01-01,APP-231,Job Scheduler Viewer,IT Shared Services,integration,replatform,False,3,3,2.0,,False,True
+1,2027-01-01,APP-247,File Transfer Service,IT Shared Services,platform-eng,replatform,False,3,3,2.0,,False,True
+2,2027-02-01,APP-002,Auto Quote Sync,Personal Lines,auto-rating,rehost,False,4,4,1.0,,False,False
+2,2027-02-01,APP-030,Auto Quote Hub,Personal Lines,policy-core,rehost,False,2,3,1.0,,False,False
+2,2027-02-01,APP-039,Renewal Service,Personal Lines,home-quote,rehost,False,3,3,1.0,,False,False
+2,2027-02-01,APP-045,Underwriting Rules Workbench,Personal Lines,auto-rating,replatform,False,2,5,2.0,PII,False,False
+2,2027-02-01,APP-149,Life Illustration Service,Life and Annuities,annuity-ops,replatform,False,2,7,2.0,PII,False,False
+2,2027-02-01,APP-156,Tax Sync,Finance,treasury,replatform,False,3,2,2.0,SOX,False,False
+2,2027-02-01,APP-171,Reinsurance Gateway,Finance,treasury,replatform,False,3,3,2.0,SOX,False,False
+2,2027-02-01,APP-183,Lead Routing Engine,Distribution,agency-portal,replatform,False,4,5,2.0,,False,False
+2,2027-02-01,APP-186,Agency Contract API,Distribution,producer-mgmt,replatform,False,2,4,2.0,,False,False
+2,2027-02-01,APP-188,Lead Routing Loader,Distribution,agency-portal,repurchase,False,2,4,1.5,PII,False,False
+2,2027-02-01,APP-190,Agency Contract Hub,Distribution,producer-mgmt,replatform,False,4,2,2.0,PII,False,False
+2,2027-02-01,APP-196,Commission Sync,Distribution,agency-portal,replatform,False,2,4,2.0,PII,True,False
+2,2027-02-01,APP-240,Identity Sync Tracker,IT Shared Services,platform-eng,repurchase,False,3,2,1.5,,False,False
+2,2027-02-01,APP-243,Identity Sync API,IT Shared Services,platform-eng,refactor,False,2,4,4.0,,False,False
+2,2027-02-01,APP-244,Identity Sync Engine,IT Shared Services,integration,replatform,False,3,4,2.0,,False,False
+3,2027-03-01,APP-056,Submission Sync,Commercial Lines,commercial-uw,replatform,False,3,4,2.0,PII,False,False
+3,2027-03-01,APP-060,Exposure Portal,Commercial Lines,specialty-lines,repurchase,False,3,4,1.5,PII,False,False
+3,2027-03-01,APP-070,Loss Control Portal,Commercial Lines,commercial-uw,replatform,False,3,3,2.0,PII,True,False
+3,2027-03-01,APP-081,Risk Survey API,Commercial Lines,specialty-lines,replatform,False,3,2,2.0,PII,False,False
+3,2027-03-01,APP-083,Salvage Console,Claims,claims-payments,rehost,False,4,2,1.0,,False,False
+3,2027-03-01,APP-092,First Notice Hub,Claims,claims-analytics,replatform,False,3,4,2.0,PII,False,False
+3,2027-03-01,APP-094,Medical Bill Gateway,Claims,claims-analytics,rehost,False,4,5,1.0,PHI PII,False,False
+3,2027-03-01,APP-109,Fraud Score Calculator,Claims,claims-analytics,repurchase,False,2,2,1.5,PII,True,False
+3,2027-03-01,APP-118,Repair Network Gateway,Claims,claims-intake,replatform,False,3,4,2.0,,False,False
+3,2027-03-01,APP-124,Repair Network Calculator,Claims,claims-payments,replatform,False,2,4,2.0,PII,True,False
+3,2027-03-01,APP-126,Subrogation Batch,Claims,claims-payments,rehost,False,4,3,1.0,PII,False,False
+3,2027-03-01,APP-138,Commission Split Service,Life and Annuities,annuity-ops,rehost,False,3,3,1.0,,False,False
+3,2027-03-01,APP-143,Annuity Payout Service,Life and Annuities,life-admin,replatform,False,4,4,2.0,PHI,False,False
+3,2027-03-01,APP-147,Beneficiary Gateway,Life and Annuities,annuity-ops,replatform,False,3,3,2.0,PII,True,False
+3,2027-03-01,APP-181,Lead Routing API,Distribution,producer-mgmt,replatform,False,2,2,2.0,,True,False
+3,2027-03-01,APP-184,Lead Routing Hub,Distribution,agency-portal,rehost,False,2,5,1.0,PII,False,False
+3,2027-03-01,APP-191,Producer Licensing API,Distribution,producer-mgmt,replatform,False,4,4,2.0,PII,False,False
+3,2027-03-01,APP-204,Lead Routing Reporting,Distribution,producer-mgmt,rehost,False,3,4,1.0,PII,False,False
+3,2027-03-01,APP-249,Claims Data Hub,Claims,data-platform,replatform,False,1,4,0,PCI PHI PII,True,False
+4,2027-04-01,APP-003,Discount API,Personal Lines,policy-core,replatform,False,1,3,2.0,PII,False,False
+4,2027-04-01,APP-057,Submission Workbench,Commercial Lines,commercial-uw,replatform,False,1,7,2.0,,False,False
+4,2027-04-01,APP-066,Fleet Rating Calculator,Commercial Lines,commercial-uw,rehost,False,1,3,1.0,PII,False,False
+4,2027-04-01,APP-086,Claim Payment Console,Claims,claims-payments,rehost,False,1,2,1.0,PCI PII,True,False
+4,2027-04-01,APP-090,Reserve Gateway,Claims,claims-analytics,replatform,False,1,4,2.0,,True,False
+4,2027-04-01,APP-115,Reserve Hub,Claims,claims-analytics,rehost,False,2,4,1.0,PII,True,False
+4,2027-04-01,APP-116,Reserve Loader,Claims,claims-payments,replatform,False,2,4,2.0,PII,False,False
+4,2027-04-01,APP-117,Medical Bill Console,Claims,claims-payments,rehost,False,1,7,1.0,PHI PII,True,False
+4,2027-04-01,APP-135,Beneficiary Portal,Life and Annuities,life-admin,replatform,False,1,4,2.0,PHI PII,False,False
+4,2027-04-01,APP-150,Medical Underwriting Service,Life and Annuities,life-admin,rehost,False,1,4,1.0,PHI PII,False,False
+4,2027-04-01,APP-152,Tax Batch,Finance,finance-systems,repurchase,False,2,6,1.5,SOX,True,False
+4,2027-04-01,APP-163,General Ledger Viewer,Finance,finance-systems,replatform,False,2,5,2.0,SOX,False,False
+4,2027-04-01,APP-170,Tax Tracker,Finance,treasury,rehost,False,3,3,1.0,SOX,False,False
+4,2027-04-01,APP-185,Commission Console,Distribution,producer-mgmt,replatform,False,1,4,2.0,PII,False,False
+4,2027-04-01,APP-187,Agency Contract Tracker,Distribution,producer-mgmt,rehost,False,1,4,1.0,PII,False,False
+4,2027-04-01,APP-192,Marketing Campaign Loader,Distribution,agency-portal,replatform,False,1,4,2.0,PII,False,False
+4,2027-04-01,APP-233,Service Desk Tracker,IT Shared Services,integration,replatform,False,3,2,2.0,,False,False
+4,2027-04-01,APP-235,Service Desk Gateway,IT Shared Services,platform-eng,rehost,False,2,1,1.0,,False,False
+4,2027-04-01,APP-236,File Transfer Viewer,IT Shared Services,integration,repurchase,False,3,2,1.5,,False,False
+4,2027-04-01,APP-237,File Transfer Gateway,IT Shared Services,platform-eng,rehost,False,2,3,1.0,,False,False
+4,2027-04-01,APP-242,Service Desk Workbench,IT Shared Services,integration,repurchase,False,2,5,1.5,,False,False
+4,2027-04-01,APP-246,Identity Sync Service,IT Shared Services,platform-eng,replatform,False,2,4,2.0,,True,False
+5,2027-05-01,APP-085,Reserve Calculator,Claims,claims-payments,rehost,False,1,5,1.0,PII,False,False
+5,2027-05-01,APP-096,First Notice Console,Claims,claims-payments,replatform,False,2,3,2.0,,False,False
+5,2027-05-01,APP-099,Salvage Sync,Claims,claims-intake,rehost,False,3,4,1.0,PII,False,False
+5,2027-05-01,APP-100,Salvage Batch,Claims,claims-analytics,replatform,False,2,5,2.0,,True,False
+5,2027-05-01,APP-102,Medical Bill Tracker,Claims,claims-analytics,repurchase,False,3,4,1.5,PHI PII,False,False
+5,2027-05-01,APP-114,Adjuster Console,Claims,claims-intake,replatform,False,2,4,2.0,PII,True,False
+5,2027-05-01,APP-120,Salvage Reporting,Claims,claims-payments,rehost,False,2,5,1.0,,False,False
+5,2027-05-01,APP-122,Claim Payment Loader,Claims,claims-analytics,replatform,False,3,3,2.0,PCI,False,False
+5,2027-05-01,APP-169,Expense Hub,Finance,finance-systems,replatform,False,4,4,2.0,SOX,False,False
+5,2027-05-01,APP-172,Statutory Reporting Viewer,Finance,finance-systems,rehost,False,1,3,1.0,SOX,False,False
+5,2027-05-01,APP-182,Lead Routing Workbench,Distribution,producer-mgmt,rehost,False,3,4,1.0,PII,False,False
+5,2027-05-01,APP-195,Producer Licensing Loader,Distribution,producer-mgmt,replatform,False,1,3,2.0,PII,False,False
+5,2027-05-01,APP-197,Producer Licensing Sync,Distribution,agency-portal,replatform,False,3,2,2.0,,False,False
+5,2027-05-01,APP-198,Agent Portal Calculator,Distribution,agency-portal,rehost,False,2,4,1.0,PII,False,False
+5,2027-05-01,APP-202,Producer Licensing Reporting,Distribution,producer-mgmt,rehost,False,3,5,1.0,PII,False,False
+5,2027-05-01,APP-230,Identity Sync Batch,IT Shared Services,platform-eng,replatform,False,2,3,2.0,,True,False
+5,2027-05-01,APP-238,Document Archive Workbench,IT Shared Services,platform-eng,rehost,False,2,3,1.0,,False,False
+5,2027-05-01,APP-239,Job Scheduler Loader,IT Shared Services,integration,repurchase,False,1,5,1.5,,False,False
+5,2027-05-01,APP-241,Document Archive Hub,IT Shared Services,integration,replatform,False,1,4,2.0,,False,False
+6,2027-06-01,APP-001,Home Rating Service,Personal Lines,home-quote,replatform,False,3,2,2.0,PII,False,False
+6,2027-06-01,APP-006,Policy Issuance Console,Personal Lines,home-quote,rehost,False,3,3,1.0,PII,False,False
+6,2027-06-01,APP-008,Telematics Calculator,Personal Lines,policy-core,rehost,False,3,2,1.0,,False,False
+6,2027-06-01,APP-009,Coverage Selector Viewer,Personal Lines,policy-core,replatform,False,3,3,2.0,,False,False
+6,2027-06-01,APP-029,Telematics Workbench,Personal Lines,policy-core,replatform,False,2,5,2.0,PII,False,False
+6,2027-06-01,APP-098,First Notice Service,Claims,claims-intake,replatform,False,2,4,2.0,PII,False,False
+6,2027-06-01,APP-106,First Notice Reporting,Claims,claims-analytics,replatform,False,1,4,2.0,,True,False
+6,2027-06-01,APP-110,Catastrophe Gateway,Claims,claims-payments,repurchase,False,2,3,1.5,PII,True,False
+6,2027-06-01,APP-113,First Notice Tracker,Claims,claims-payments,rehost,False,1,2,1.0,PII,False,False
+6,2027-06-01,APP-121,Adjuster Calculator,Claims,claims-payments,replatform,False,3,3,2.0,PII,False,False
+6,2027-06-01,APP-151,General Ledger Portal,Finance,treasury,repurchase,False,2,3,1.5,SOX,False,False
+6,2027-06-01,APP-154,Reinsurance Viewer,Finance,finance-systems,rehost,False,2,2,1.0,SOX,False,False
+6,2027-06-01,APP-158,Reinsurance API,Finance,treasury,replatform,False,1,2,2.0,SOX,False,False
+6,2027-06-01,APP-165,Accounts Payable Reporting,Finance,treasury,rehost,False,4,2,1.0,SOX,False,False
+6,2027-06-01,APP-177,Statutory Reporting Batch,Finance,finance-systems,replatform,False,1,5,2.0,SOX,False,False
+6,2027-06-01,APP-193,Commission Portal,Distribution,producer-mgmt,rehost,False,3,3,1.0,PII,False,False
+6,2027-06-01,APP-194,Agent Portal Loader,Distribution,agency-portal,replatform,False,3,2,2.0,PII,False,False
+6,2027-06-01,APP-200,Commission Workbench,Distribution,producer-mgmt,replatform,False,1,6,2.0,PII,True,False
+6,2027-06-01,APP-220,Benefits Sync,Human Resources,people-systems,rehost,False,2,2,1.0,,False,False
+6,2027-06-01,APP-226,Time Entry Tracker,Human Resources,people-systems,rehost,False,3,6,1.0,,False,False
+7,2027-07-01,APP-071,Loss Control Service,Commercial Lines,commercial-uw,replatform,False,2,4,2.0,PII,True,False
+7,2027-07-01,APP-128,Medical Underwriting Console,Life and Annuities,annuity-ops,rehost,False,2,5,1.0,PHI PII,False,False
+7,2027-07-01,APP-134,Beneficiary Tracker,Life and Annuities,life-admin,rehost,False,3,5,1.0,PHI,False,False
+7,2027-07-01,APP-137,Medical Underwriting Workbench,Life and Annuities,life-admin,rehost,False,3,6,1.0,PHI,False,False
+7,2027-07-01,APP-140,Medical Underwriting Portal,Life and Annuities,annuity-ops,replatform,False,1,6,2.0,PHI PII,False,False
+7,2027-07-01,APP-161,Expense Engine,Finance,treasury,repurchase,False,3,2,1.5,SOX,False,False
+7,2027-07-01,APP-164,Premium Accounting Viewer,Finance,finance-systems,rehost,False,1,5,1.0,SOX,False,False
+7,2027-07-01,APP-166,Expense Service,Finance,treasury,rehost,False,1,4,1.0,SOX,False,False
+7,2027-07-01,APP-167,Reinsurance Engine,Finance,treasury,repurchase,False,2,4,1.5,SOX,True,False
+7,2027-07-01,APP-173,Reinsurance Workbench,Finance,finance-systems,rehost,False,4,2,1.0,SOX,False,False
+7,2027-07-01,APP-180,Accounts Payable Tracker,Finance,finance-systems,replatform,False,2,4,2.0,SOX,True,False
+7,2027-07-01,APP-206,Loss Triangle Workbench,Actuarial,actuarial-models,refactor,False,1,3,4.0,,True,False
+7,2027-07-01,APP-217,Pricing Model Hub,Actuarial,actuarial-models,replatform,False,2,5,2.0,,False,False
+7,2027-07-01,APP-219,Learning Viewer,Human Resources,people-systems,rehost,False,1,4,1.0,,False,False
+7,2027-07-01,APP-224,Time Entry Gateway,Human Resources,people-systems,repurchase,False,2,2,1.5,,True,False
+7,2027-07-01,APP-229,Email Archive Loader,IT Shared Services,integration,replatform,False,1,4,2.0,,False,False
+7,2027-07-01,APP-232,Identity Sync Gateway,IT Shared Services,integration,replatform,False,3,3,2.0,,False,False
+7,2027-07-01,APP-234,Print Stream Viewer,IT Shared Services,platform-eng,repurchase,False,2,3,1.5,,True,False
+8,2027-08-01,APP-004,Discount Console,Personal Lines,policy-core,rehost,False,4,2,1.0,,True,False
+8,2027-08-01,APP-020,Endorsement API,Personal Lines,policy-core,repurchase,False,3,2,1.5,PII,False,False
+8,2027-08-01,APP-021,Underwriting Rules Calculator,Personal Lines,auto-rating,rehost,False,4,2,1.0,PII,False,False
+8,2027-08-01,APP-040,Policy Issuance Sync,Personal Lines,home-quote,rehost,False,1,4,1.0,,False,False
+8,2027-08-01,APP-046,Billing Plan Loader,Personal Lines,auto-rating,replatform,False,3,4,2.0,PCI PII,False,False
+8,2027-08-01,APP-059,Risk Survey Sync,Commercial Lines,commercial-uw,rehost,False,3,5,1.0,PII,False,False
+8,2027-08-01,APP-063,Workers Comp Sync,Commercial Lines,specialty-lines,replatform,False,2,6,2.0,PII,True,False
+8,2027-08-01,APP-132,Annuity Payout Sync,Life and Annuities,annuity-ops,rehost,False,1,5,1.0,,False,False
+8,2027-08-01,APP-133,Commission Split Sync,Life and Annuities,annuity-ops,replatform,False,4,2,2.0,PHI,False,False
+8,2027-08-01,APP-142,Medical Underwriting Batch,Life and Annuities,life-admin,replatform,False,2,4,2.0,PHI,True,False
+8,2027-08-01,APP-155,Premium Accounting Calculator,Finance,treasury,rehost,False,3,5,1.0,SOX,False,False
+8,2027-08-01,APP-159,Premium Accounting Gateway,Finance,finance-systems,repurchase,False,1,2,1.5,SOX,False,False
+8,2027-08-01,APP-162,Premium Accounting Workbench,Finance,finance-systems,replatform,False,2,4,2.0,SOX,False,False
+9,2027-09-01,APP-023,Billing Plan Gateway,Personal Lines,policy-core,rehost,False,3,4,1.0,PCI PII,False,False
+9,2027-09-01,APP-049,Submission Calculator,Commercial Lines,commercial-uw,rehost,False,2,6,1.0,PII,False,False
+9,2027-09-01,APP-065,Bond Portal,Commercial Lines,specialty-lines,replatform,False,2,6,2.0,PII,True,False
+9,2027-09-01,APP-069,Exposure Tracker,Commercial Lines,specialty-lines,replatform,False,2,5,2.0,PII,False,False
+9,2027-09-01,APP-079,Broker Quote Calculator,Commercial Lines,commercial-uw,replatform,False,2,6,2.0,,True,False
+9,2027-09-01,APP-130,Policy Loan Viewer,Life and Annuities,life-admin,rehost,False,2,4,1.0,PHI PII,False,False
+9,2027-09-01,APP-139,Beneficiary Calculator,Life and Annuities,annuity-ops,replatform,False,3,3,2.0,PHI PII,False,False
+9,2027-09-01,APP-153,Reinsurance Hub,Finance,finance-systems,rehost,False,4,3,1.0,SOX,False,False
+9,2027-09-01,APP-157,Tax Viewer,Finance,finance-systems,replatform,False,4,4,2.0,SOX,False,False
+9,2027-09-01,APP-168,Tax Engine,Finance,treasury,replatform,False,4,5,2.0,SOX,True,False
+9,2027-09-01,APP-174,Statutory Reporting Console,Finance,finance-systems,repurchase,False,4,5,1.5,SOX,False,False
+9,2027-09-01,APP-175,Cash Management Reporting,Finance,treasury,repurchase,False,3,3,1.5,PCI SOX,False,False
+9,2027-09-01,APP-176,Premium Accounting Hub,Finance,treasury,replatform,False,3,3,2.0,SOX,True,False
+9,2027-09-01,APP-208,Pricing Model Service,Actuarial,actuarial-models,refactor,False,3,2,4.0,,False,False
+9,2027-09-01,APP-213,Capital Model Console,Actuarial,actuarial-models,replatform,False,3,3,2.0,,False,False
+9,2027-09-01,APP-218,Loss Triangle Console,Actuarial,actuarial-models,repurchase,False,2,4,1.5,,False,False
+10,2027-10-01,APP-012,Billing Plan API,Personal Lines,auto-rating,refactor,False,1,5,4.0,PCI,False,False
+10,2027-10-01,APP-013,Underwriting Rules Service,Personal Lines,home-quote,replatform,False,2,6,2.0,PII,False,False
+10,2027-10-01,APP-028,Underwriting Rules Gateway,Personal Lines,auto-rating,repurchase,False,4,4,1.5,PII,False,False
+10,2027-10-01,APP-067,Loss Control Viewer,Commercial Lines,commercial-uw,replatform,False,3,3,2.0,PII,False,False
+10,2027-10-01,APP-073,Workers Comp Viewer,Commercial Lines,commercial-uw,rehost,False,1,4,1.0,PII,False,False
+10,2027-10-01,APP-207,Loss Triangle Hub,Actuarial,actuarial-models,refactor,False,2,3,4.0,,False,False
+10,2027-10-01,APP-212,Capital Model Hub,Actuarial,actuarial-models,replatform,False,2,4,2.0,,False,False
+10,2027-10-01,APP-215,Experience Study Hub,Actuarial,actuarial-models,replatform,False,3,4,2.0,,False,False
+10,2027-10-01,APP-227,Learning Service,Human Resources,people-systems,repurchase,False,3,3,1.5,,False,False
+11,2027-11-01,APP-005,Endorsement Console,Personal Lines,policy-core,rehost,False,1,2,1.0,PII,True,False
+11,2027-11-01,APP-018,Home Rating Calculator,Personal Lines,policy-core,replatform,False,3,2,2.0,,False,False
+11,2027-11-01,APP-025,Endorsement Calculator,Personal Lines,policy-core,replatform,False,4,4,2.0,,False,False
+11,2027-11-01,APP-044,Billing Plan Portal,Personal Lines,home-quote,replatform,False,3,2,2.0,PCI PII,False,False
+11,2027-11-01,APP-055,Exposure Hub,Commercial Lines,commercial-uw,replatform,False,2,5,2.0,PII,True,False
+11,2027-11-01,APP-080,Bond Gateway,Commercial Lines,commercial-uw,replatform,False,1,4,2.0,PII,False,False
+11,2027-11-01,APP-104,Repair Network Portal,Claims,claims-payments,rehost,False,2,4,1.0,PCI PII,False,False
+11,2027-11-01,APP-107,Repair Network Tracker,Claims,claims-payments,replatform,False,3,3,2.0,,False,False
+11,2027-11-01,APP-108,Reserve Reporting,Claims,claims-analytics,replatform,False,2,6,2.0,PII,False,False
+11,2027-11-01,APP-123,Medical Bill Service,Claims,claims-payments,rehost,False,2,6,1.0,PHI PII,False,False
+11,2027-11-01,APP-125,Subrogation Tracker,Claims,claims-analytics,rehost,False,2,3,1.0,PII,False,False
+11,2027-11-01,APP-205,Experience Study Viewer,Actuarial,actuarial-models,rehost,False,3,3,1.0,,False,False
+11,2027-11-01,APP-209,Experience Study Gateway,Actuarial,actuarial-models,refactor,False,2,2,4.0,,False,False
+11,2027-11-01,APP-210,Pricing Model Gateway,Actuarial,actuarial-models,refactor,False,2,3,4.0,,True,False
+12,2027-12-01,APP-014,Auto Quote Tracker,Personal Lines,home-quote,repurchase,False,2,5,1.5,PII,False,False
+12,2027-12-01,APP-019,Discount Loader,Personal Lines,auto-rating,replatform,False,3,3,2.0,PII,False,False
+12,2027-12-01,APP-024,Auto Quote API,Personal Lines,policy-core,replatform,False,4,3,2.0,PII,False,False
+12,2027-12-01,APP-041,Renewal Hub,Personal Lines,policy-core,repurchase,False,2,3,1.5,PII,True,False
+12,2027-12-01,APP-043,Billing Plan Sync,Personal Lines,home-quote,repurchase,False,3,3,1.5,PCI PII,False,False
+12,2027-12-01,APP-048,Renewal Calculator,Personal Lines,home-quote,repurchase,False,1,4,1.5,PII,True,False
+12,2027-12-01,APP-050,Bond Service,Commercial Lines,commercial-uw,replatform,False,3,4,2.0,PII,False,False
+12,2027-12-01,APP-061,Fleet Rating Viewer,Commercial Lines,commercial-uw,rehost,False,3,2,1.0,,False,False
+12,2027-12-01,APP-072,Fleet Rating Gateway,Commercial Lines,specialty-lines,rehost,False,2,5,1.0,PII,True,False
+12,2027-12-01,APP-077,Fleet Rating Loader,Commercial Lines,specialty-lines,rehost,False,1,4,1.0,PII,True,False
+12,2027-12-01,APP-084,Medical Bill Calculator,Claims,claims-analytics,repurchase,False,2,5,1.5,PHI PII,False,False
+12,2027-12-01,APP-101,Catastrophe Engine,Claims,claims-payments,replatform,False,4,3,2.0,,True,False
+12,2027-12-01,APP-105,Subrogation Gateway,Claims,claims-intake,replatform,False,1,4,2.0,PII,False,False
+12,2027-12-01,APP-111,Repair Network Hub,Claims,claims-analytics,replatform,False,2,5,2.0,PII,True,False
+12,2027-12-01,APP-211,Pricing Model Calculator,Actuarial,actuarial-models,rehost,False,2,6,1.0,,True,False
+12,2027-12-01,APP-214,Capital Model Engine,Actuarial,actuarial-models,replatform,False,3,5,2.0,,False,False
+12,2027-12-01,APP-216,Pricing Model API,Actuarial,actuarial-models,rehost,False,3,3,1.0,,True,False
+12,2027-12-01,APP-221,Benefits Batch,Human Resources,people-systems,replatform,False,2,3,2.0,,False,False
+13,2028-01-01,APP-007,Underwriting Rules Engine,Personal Lines,home-quote,replatform,False,3,4,2.0,PII,False,False
+13,2028-01-01,APP-011,Home Rating Portal,Personal Lines,policy-core,replatform,False,1,3,2.0,,False,False
+13,2028-01-01,APP-015,Endorsement Batch,Personal Lines,home-quote,rehost,False,3,4,1.0,PII,False,False
+13,2028-01-01,APP-032,Underwriting Rules Viewer,Personal Lines,auto-rating,replatform,False,2,6,2.0,PII,False,False
+13,2028-01-01,APP-033,Telematics Viewer,Personal Lines,auto-rating,replatform,False,3,4,2.0,PII,False,False
+13,2028-01-01,APP-036,Home Rating Viewer,Personal Lines,home-quote,replatform,False,3,2,2.0,PII,False,False
+13,2028-01-01,APP-037,Renewal Viewer,Personal Lines,policy-core,rehost,False,3,5,1.0,,False,False
+13,2028-01-01,APP-047,Coverage Selector Reporting,Personal Lines,policy-core,replatform,False,3,4,2.0,,False,False
+13,2028-01-01,APP-074,Risk Survey Workbench,Commercial Lines,commercial-uw,replatform,False,2,2,2.0,PII,False,False
+13,2028-01-01,APP-087,Catastrophe API,Claims,claims-payments,rehost,False,1,3,1.0,PII,True,False
+13,2028-01-01,APP-088,Adjuster Batch,Claims,claims-intake,replatform,False,4,3,2.0,PII,False,False
+13,2028-01-01,APP-089,Subrogation Hub,Claims,claims-payments,rehost,False,3,3,1.0,,False,False
+13,2028-01-01,APP-091,Catastrophe Tracker,Claims,claims-intake,replatform,False,3,2,2.0,PII,False,False
+13,2028-01-01,APP-093,First Notice Gateway,Claims,claims-analytics,rehost,False,3,5,1.0,PII,False,False
+13,2028-01-01,APP-119,Fraud Score Batch,Claims,claims-payments,replatform,False,2,5,2.0,PII,False,False
+13,2028-01-01,APP-136,Life Illustration Loader,Life and Annuities,life-admin,rehost,False,2,5,1.0,,False,False
+13,2028-01-01,APP-141,Annuity Payout Portal,Life and Annuities,annuity-ops,rehost,False,3,3,1.0,PHI,False,False
+13,2028-01-01,APP-146,Life Illustration Engine,Life and Annuities,annuity-ops,replatform,False,3,3,2.0,PHI,False,False
+13,2028-01-01,APP-225,Recruiting Batch,Human Resources,people-systems,rehost,False,3,3,1.0,,False,False
+13,2028-01-01,APP-228,Benefits Console,Human Resources,people-systems,replatform,False,4,4,2.0,,False,False
+14,2028-02-01,APP-010,Auto Quote Portal,Personal Lines,home-quote,replatform,False,2,3,2.0,,False,False
+14,2028-02-01,APP-016,Endorsement Workbench,Personal Lines,policy-core,replatform,False,4,5,2.0,,False,False
+14,2028-02-01,APP-027,Endorsement Viewer,Personal Lines,home-quote,rehost,False,4,6,1.0,,False,False
+14,2028-02-01,APP-031,Underwriting Rules Loader,Personal Lines,auto-rating,replatform,False,3,2,2.0,PII,False,False
+14,2028-02-01,APP-038,Billing Plan Calculator,Personal Lines,policy-core,rehost,False,3,4,1.0,PCI PII,False,False
+14,2028-02-01,APP-042,Renewal Console,Personal Lines,home-quote,rehost,False,2,6,1.0,,False,False
+14,2028-02-01,APP-058,Exposure Console,Commercial Lines,specialty-lines,replatform,False,3,4,2.0,PII,False,False
+14,2028-02-01,APP-076,Workers Comp Console,Commercial Lines,specialty-lines,replatform,False,3,3,2.0,PII,False,False
+14,2028-02-01,APP-078,Submission Batch,Commercial Lines,commercial-uw,replatform,False,2,5,2.0,PII,True,False
+14,2028-02-01,APP-082,Workers Comp Gateway,Commercial Lines,commercial-uw,rehost,False,3,3,1.0,PII,False,False
+14,2028-02-01,APP-144,Annuity Payout API,Life and Annuities,annuity-ops,replatform,False,2,3,2.0,PHI PII,False,False
+14,2028-02-01,APP-148,Commission Split Loader,Life and Annuities,annuity-ops,replatform,False,3,3,2.0,PHI,True,False
